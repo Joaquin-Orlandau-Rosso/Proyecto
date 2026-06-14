@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>¿Por qué tanto lío con el LoL? · Una presentación entre amigos</title>
+<meta name="description" content="Para los que nunca jugaron: qué es realmente el League of Legends, por qué mueve a millones y por qué a algunos nos importa tanto.">
+<meta property="og:title" content="¿Por qué tanto lío con el LoL?">
+<meta property="og:description" content="Una presentación para los que nunca jugaron: qué es el League of Legends y por qué engancha tanto.">
+<meta property="og:type" content="website">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Spectral:ital,wght@0,300;0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+:root{
+  --void:#010a13;
+  --void2:#04121f;
+  --ink:#0a1428;
+  --gold:#c8aa6e;
+  --gold-bright:#f0e6d2;
+  --gold-deep:#785a28;
+  --teal:#0ac8b9;
+  --blue:#0397ab;
+  --blue-deep:#005a82;
+  --crimson:#be1e37;
+  --grey:#a09b8c;
+  --grey-dim:#5b5a56;
+  --cur:url("lol-cursor.cur"),url("lol-cursor.png") 0 0,auto;
+}
+
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  background:var(--void);
+  color:var(--gold-bright);
+  font-family:'Spectral',serif;
+  overflow-x:hidden;
+  cursor:var(--cur);
+}
+::selection{background:var(--teal);color:var(--void)}
+
+/* ---------- League of Legends gold cursor ---------- */
+a,button,[data-hot],[data-tilt],.cta,.moment,.champ{cursor:var(--cur)}
+@media (hover:none){:root{--cur:auto}}
+
+/* ---------- particle canvas ---------- */
+#stars{position:fixed;inset:0;z-index:0;pointer-events:none}
+
+/* ---------- scroll progress hex bar ---------- */
+.progress{position:fixed;top:0;left:0;height:3px;width:0;z-index:500;
+  background:linear-gradient(90deg,var(--gold-deep),var(--gold),var(--teal));
+  box-shadow:0 0 14px var(--teal)}
+
+/* ---------- generic layout ---------- */
+section{position:relative;z-index:2;padding:120px 8vw;max-width:1400px;margin:0 auto}
+.eyebrow{font-family:'Cinzel',serif;letter-spacing:.55em;text-transform:uppercase;font-size:.72rem;color:var(--teal);margin-bottom:1.4rem;display:flex;align-items:center;gap:1rem}
+.eyebrow::before{content:'';width:42px;height:1px;background:linear-gradient(90deg,transparent,var(--teal))}
+h2{font-family:'Cinzel',serif;font-weight:700;font-size:clamp(2rem,5.5vw,4.4rem);line-height:1.02;color:var(--gold-bright);margin-bottom:1.6rem;letter-spacing:.01em}
+h2 .accent{background:linear-gradient(180deg,var(--gold-bright),var(--gold) 55%,var(--gold-deep));-webkit-background-clip:text;background-clip:text;color:transparent}
+p.lead{font-size:clamp(1.05rem,1.6vw,1.35rem);line-height:1.85;color:var(--grey);max-width:62ch;font-weight:300}
+p.lead strong{color:var(--gold-bright);font-weight:600}
+em{color:var(--teal);font-style:italic}
+
+/* ---------- reveal animation ---------- */
+.reveal{opacity:0;transform:translateY(46px);transition:opacity 1s cubic-bezier(.16,1,.3,1),transform 1s cubic-bezier(.16,1,.3,1)}
+.reveal.in{opacity:1;transform:none}
+.reveal.d1{transition-delay:.12s}.reveal.d2{transition-delay:.24s}.reveal.d3{transition-delay:.36s}.reveal.d4{transition-delay:.48s}.reveal.d5{transition-delay:.6s}
+
+/* ================= HERO ================= */
+.hero{position:relative;min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:0 6vw;overflow:hidden}
+.hero-glow{position:absolute;top:42%;left:50%;width:120vw;height:120vw;max-width:1500px;max-height:1500px;transform:translate(-50%,-50%);
+  background:radial-gradient(circle,rgba(10,200,185,.10) 0%,rgba(3,151,171,.06) 30%,transparent 62%);
+  animation:breathe 9s ease-in-out infinite;z-index:1}
+@keyframes breathe{0%,100%{opacity:.7;transform:translate(-50%,-50%) scale(1)}50%{opacity:1;transform:translate(-50%,-50%) scale(1.08)}}
+
+.hex-ring{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);z-index:1;pointer-events:none}
+.hex-ring svg{display:block}
+.hex-ring .spin1{animation:spin 38s linear infinite;transform-origin:center}
+.hex-ring .spin2{animation:spin 26s linear infinite reverse;transform-origin:center}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+.hero-content{position:relative;z-index:3}
+.kicker{font-family:'Cinzel',serif;letter-spacing:.7em;text-transform:uppercase;font-size:clamp(.6rem,1.4vw,.85rem);color:var(--gold);opacity:0;animation:fadeUp 1s .2s forwards}
+.hero h1{font-family:'Cinzel',serif;font-weight:900;font-size:clamp(2.8rem,11vw,9rem);line-height:.92;margin:1.4rem 0;letter-spacing:.02em}
+.hero h1 .l{display:inline-block;opacity:0;transform:translateY(70px) rotateX(-40deg);transform-origin:bottom;animation:dropIn .9s cubic-bezier(.2,.8,.2,1) forwards}
+.hero h1 .row{display:flex;justify-content:center;gap:.32em;flex-wrap:wrap}
+.hero h1 .grail{background:linear-gradient(180deg,#fff7e6,var(--gold) 45%,var(--gold-deep) 90%);-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 4px 24px rgba(200,170,110,.35))}
+.hero h1 .void-word{color:var(--void);-webkit-text-stroke:1.5px var(--gold);letter-spacing:.04em}
+@keyframes dropIn{to{opacity:1;transform:none}}
+@keyframes fadeUp{to{opacity:1;transform:none}}
+
+.hero-sub{font-size:clamp(1rem,2vw,1.4rem);color:var(--grey);max-width:54ch;margin:1.4rem auto 0;font-weight:300;line-height:1.7;opacity:0;animation:fadeUp 1s 1.5s forwards}
+.hero-sub b{color:var(--teal);font-weight:500}
+
+.scroll-hint{position:absolute;bottom:38px;left:50%;transform:translateX(-50%);z-index:4;text-align:center;font-family:'Cinzel',serif;font-size:.65rem;letter-spacing:.4em;text-transform:uppercase;color:var(--gold);display:flex;flex-direction:column;align-items:center;gap:.8rem;opacity:0;animation:fadeUp 1s 2s forwards}
+.scroll-hint .line{width:1px;height:46px;background:linear-gradient(var(--gold),transparent);position:relative;overflow:hidden}
+.scroll-hint .line::after{content:'';position:absolute;top:-50%;left:0;width:100%;height:50%;background:var(--teal);animation:drip 1.8s ease-in-out infinite}
+@keyframes drip{0%{top:-50%}100%{top:100%}}
+
+/* ---------- honest / toxicity section ---------- */
+.honest{text-align:center;display:flex;flex-direction:column;align-items:center}
+.honest .quote{font-family:'Cinzel',serif;font-size:clamp(1.5rem,4.5vw,3.4rem);line-height:1.25;max-width:18ch;color:var(--gold-bright);margin:0 auto 2rem;font-weight:400}
+.honest .quote .strike{position:relative;color:var(--crimson)}
+.honest .quote .strike::after{content:'';position:absolute;left:-4%;top:55%;width:108%;height:3px;background:var(--crimson);transform:scaleX(0);transform-origin:left;box-shadow:0 0 12px var(--crimson)}
+.honest .quote .strike.in::after{animation:strike 1s .6s cubic-bezier(.7,0,.3,1) forwards}
+@keyframes strike{to{transform:scaleX(1)}}
+
+/* ================= REASONS ================= */
+.reason{display:grid;grid-template-columns:90px 1fr;gap:2.5rem;padding:90px 0;border-top:1px solid rgba(200,170,110,.14);position:relative}
+.reason:first-of-type{border-top:none}
+.reason .num{font-family:'Cinzel',serif;font-weight:900;font-size:clamp(2.4rem,4vw,3.6rem);line-height:1;color:transparent;-webkit-text-stroke:1px var(--gold-deep);position:sticky;top:120px;height:fit-content}
+.reason .body h3{font-family:'Cinzel',serif;font-weight:600;font-size:clamp(1.5rem,3.4vw,2.6rem);color:var(--gold-bright);margin-bottom:1.1rem;line-height:1.1}
+.reason .body h3 .tag{display:block;font-family:'Spectral',serif;font-style:italic;font-weight:400;font-size:1rem;color:var(--teal);letter-spacing:.04em;margin-bottom:.4rem}
+.reason .body p{font-size:clamp(1rem,1.4vw,1.2rem);line-height:1.85;color:var(--grey);max-width:64ch;font-weight:300;margin-bottom:1rem}
+.reason .body p strong{color:var(--gold-bright);font-weight:600}
+.pull{margin-top:1.4rem;padding-left:1.4rem;border-left:2px solid var(--teal);font-style:italic;color:var(--gold);font-size:1.05rem;max-width:58ch}
+
+/* ================= EPIC MOMENTS ================= */
+.moments{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:1.5rem;margin-top:3rem}
+.moment{position:relative;background:linear-gradient(160deg,rgba(10,20,40,.9),rgba(1,10,19,.95));border:1px solid rgba(200,170,110,.2);padding:2.2rem 2rem;overflow:hidden;transition:transform .5s cubic-bezier(.16,1,.3,1),border-color .5s;transform-style:preserve-3d}
+.moment::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at var(--mx,50%) var(--my,0%),rgba(10,200,185,.16),transparent 60%);opacity:0;transition:opacity .4s}
+.moment:hover{border-color:var(--teal)}
+.moment:hover::before{opacity:1}
+.moment .yr{font-family:'Cinzel',serif;font-size:.78rem;letter-spacing:.3em;color:var(--teal);margin-bottom:.8rem}
+.moment h4{font-family:'Cinzel',serif;font-weight:600;font-size:1.35rem;color:var(--gold-bright);margin-bottom:.9rem;line-height:1.15;position:relative;z-index:2}
+.moment p{font-size:.98rem;line-height:1.7;color:var(--grey);font-weight:300;position:relative;z-index:2}
+.moment .corner{position:absolute;top:0;right:0;width:40px;height:40px;border-top:1px solid var(--gold);border-right:1px solid var(--gold);opacity:.5}
+.moment .corner.bl{top:auto;right:auto;bottom:0;left:0;border:none;border-bottom:1px solid var(--gold);border-left:1px solid var(--gold)}
+a.moment{display:block;text-decoration:none;color:inherit}
+.moment .watch{display:inline-flex;align-items:center;gap:.5rem;margin-top:1.2rem;font-family:'Cinzel',serif;font-size:.7rem;letter-spacing:.18em;text-transform:uppercase;color:var(--teal);position:relative;z-index:2;transition:gap .3s,opacity .3s;opacity:.85}
+.moment .watch::after{content:'▸';transition:transform .3s}
+a.moment:hover .watch{opacity:1}
+a.moment:hover .watch::after{transform:translateX(5px)}
+.moments.duo{margin-top:0}
+@media(min-width:880px){.moments.duo{grid-template-columns:repeat(2,1fr)}.moments.duo .moment.wide{grid-column:1/-1}}
+
+/* ================= STATS ================= */
+.stats-band{background:linear-gradient(180deg,transparent,rgba(3,151,171,.06),transparent);border-top:1px solid rgba(200,170,110,.14);border-bottom:1px solid rgba(200,170,110,.14)}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:2rem;text-align:center}
+.stat .n{font-family:'Cinzel',serif;font-weight:900;font-size:clamp(2.6rem,6vw,4.6rem);line-height:1;background:linear-gradient(180deg,var(--gold-bright),var(--gold-deep));-webkit-background-clip:text;background-clip:text;color:transparent}
+.stat .lbl{font-family:'Spectral',serif;font-size:.95rem;color:var(--grey);margin-top:.6rem;letter-spacing:.02em}
+
+/* ================= MYTH vs REALITY ================= */
+.myths{display:grid;gap:1px;background:rgba(200,170,110,.16);border:1px solid rgba(200,170,110,.16);margin-top:3rem}
+.myth-row{display:grid;grid-template-columns:1fr 1fr;background:var(--void)}
+.myth-row .side{padding:1.8rem 2rem}
+.myth-row .side.m{background:rgba(190,30,55,.05);border-right:1px solid rgba(200,170,110,.12)}
+.myth-row .side .h{font-family:'Cinzel',serif;font-size:.72rem;letter-spacing:.25em;text-transform:uppercase;margin-bottom:.7rem}
+.myth-row .side.m .h{color:var(--crimson)}
+.myth-row .side.r .h{color:var(--teal)}
+.myth-row .side p{font-size:1rem;line-height:1.65;color:var(--grey);font-weight:300}
+.myth-row .side.r p{color:var(--gold-bright)}
+
+/* ================= CHAMPS ================= */
+.champs{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1.4rem;margin-top:3rem}
+.champ{border:1px solid rgba(200,170,110,.2);padding:1.8rem;background:linear-gradient(165deg,rgba(10,20,40,.6),transparent);transition:.4s;position:relative}
+.champ:hover{transform:translateY(-8px);border-color:var(--gold);background:linear-gradient(165deg,rgba(10,200,185,.06),transparent)}
+.champ .role{font-family:'Cinzel',serif;font-size:.68rem;letter-spacing:.25em;color:var(--teal);text-transform:uppercase}
+.champ .name{font-family:'Cinzel',serif;font-size:1.5rem;color:var(--gold-bright);margin:.5rem 0 .8rem}
+.champ p{font-size:.92rem;color:var(--grey);line-height:1.6;font-weight:300}
+.kit{display:flex;flex-direction:column;gap:.5rem;margin-top:.4rem}
+.abil{display:flex;align-items:center;gap:.65rem}
+.abil img{width:34px;height:34px;border:1px solid var(--gold-deep);border-radius:5px;flex:none;background:var(--ink)}
+.abil .k{font-family:'Cinzel',serif;font-weight:700;font-size:.72rem;color:var(--teal);width:1.2em;text-align:center;flex:none}
+.abil .an{font-size:.9rem;color:var(--grey);line-height:1.15}
+.champ:hover .abil img{border-color:var(--gold)}
+
+/* ================= CLOSER ================= */
+.closer{text-align:center;min-height:90vh;display:flex;flex-direction:column;justify-content:center;align-items:center}
+.closer h2{font-size:clamp(2.2rem,7vw,5.5rem);max-width:16ch}
+.closer .cta{margin-top:2.5rem;font-family:'Cinzel',serif;font-size:1rem;letter-spacing:.18em;text-transform:uppercase;color:var(--void);background:linear-gradient(180deg,var(--gold-bright),var(--gold));padding:1.1rem 3rem;border:none;position:relative;overflow:hidden;transition:.3s;display:inline-block}
+.closer .cta::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,#fff,var(--teal));opacity:0;transition:.3s;z-index:-1}
+.closer .cta:hover{transform:translateY(-3px);box-shadow:0 14px 40px rgba(10,200,185,.4)}
+.closer .signature{margin-top:3.5rem;font-style:italic;color:var(--grey-dim);font-size:.95rem}
+.footer{text-align:center;padding:3rem;color:var(--grey-dim);font-size:.8rem;letter-spacing:.1em;border-top:1px solid rgba(200,170,110,.1)}
+
+/* floating runes deco */
+.rune{position:absolute;font-family:'Cinzel',serif;color:rgba(200,170,110,.07);font-weight:900;pointer-events:none;z-index:1;user-select:none}
+
+@media(max-width:720px){
+  section{padding:80px 7vw}
+  .reason{grid-template-columns:1fr;gap:1rem}
+  .reason .num{position:static}
+  .myth-row{grid-template-columns:1fr}
+  .myth-row .side.m{border-right:none;border-bottom:1px solid rgba(200,170,110,.12)}
+  :root{--cur:auto}
+}
+
+@media(prefers-reduced-motion:reduce){
+  *{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important;scroll-behavior:auto!important}
+  .reveal{opacity:1!important;transform:none!important}
+}
+</style>
+</head>
+<body>
+
+<div class="progress" id="progress"></div>
+<canvas id="stars"></canvas>
+
+<!-- ================= HERO ================= -->
+<header class="hero">
+  <div class="hero-glow"></div>
+  <div class="hex-ring">
+    <svg width="640" height="640" viewBox="0 0 640 640" fill="none">
+      <g class="spin1" opacity=".5">
+        <polygon points="320,40 564,180 564,460 320,600 76,460 76,180" stroke="#785a28" stroke-width="1" fill="none"/>
+        <polygon points="320,90 520,205 520,435 320,550 120,435 120,205" stroke="#0ac8b9" stroke-width=".6" fill="none" opacity=".4"/>
+      </g>
+      <g class="spin2" opacity=".4">
+        <circle cx="320" cy="320" r="220" stroke="#c8aa6e" stroke-width=".5" fill="none" stroke-dasharray="2 14"/>
+        <circle cx="320" cy="320" r="170" stroke="#0397ab" stroke-width=".5" fill="none" stroke-dasharray="1 22"/>
+      </g>
+    </svg>
+  </div>
+
+  <div class="hero-content">
+    <div class="kicker">Para los que nunca jugaron</div>
+    <h1>
+      <span class="row">
+        <span class="l grail" style="animation-delay:.4s">¿Por</span>
+        <span class="l grail" style="animation-delay:.55s">qué</span>
+      </span>
+      <span class="row">
+        <span class="l grail" style="animation-delay:.7s">tanto</span>
+        <span class="l void-word" style="animation-delay:.95s">LÍO?</span>
+      </span>
+    </h1>
+    <p class="hero-sub">Capaz nunca tocaste el League of Legends. Capaz solo escuchaste que es <b>"ese juego tóxico"</b>. Esta presentación es para ustedes: para que entiendan qué es de verdad, por qué lo juegan millones de personas en todo el mundo y por qué a algunos nos importa tanto como para armarles toda esta charla.</p>
+  </div>
+
+  <div class="scroll-hint"><span>Bajá a la Grieta</span><span class="line"></span></div>
+
+  <span class="rune" style="top:18%;left:8%;font-size:5rem">ᚱ</span>
+  <span class="rune" style="top:70%;right:10%;font-size:7rem">ᛟ</span>
+  <span class="rune" style="bottom:12%;left:18%;font-size:4rem">ᛗ</span>
+</header>
+
+<!-- ================= HONEST INTRO ================= -->
+<section class="honest">
+  <div class="eyebrow reveal" style="justify-content:center">Empecemos por lo que ya escuchaste</div>
+  <p class="quote reveal d1">Te dijeron que es tóxico.<br>Y el problema <span class="strike" data-strike>no es el juego</span>:<br>son <em>algunas</em> personas.</p>
+  <p class="lead reveal d2" style="text-align:center;margin:0 auto">Casi todos conocen del League of Legends lo mismo: su mala fama. "Es tóxico, la gente insulta, mejor ni te metas". Y es verdad en parte. Pero pensemos en algo que sí conocemos: el fútbol también tiene hinchas que se agarran a piñas, y a nadie se le ocurre decir que el fútbol es malo por eso. La toxicidad es como una capa de pintura fea sobre algo enorme. El problema es que mucha gente se queda mirando la pintura y nunca ve lo que hay debajo. De eso les quiero hablar.</p>
+</section>
+
+<!-- ================= WHAT IS IT (for newcomers) ================= -->
+<section>
+  <div class="eyebrow reveal">Antes que nada, lo básico</div>
+  <h2 class="reveal d1">¿Qué es esto,<br><span class="accent">en 30 segundos?</span></h2>
+  <p class="lead reveal d2">Imaginen un deporte de equipo, pero online y gratis. Dos equipos de cinco personas se enfrentan en un mapa. Cada jugador maneja un personaje (le decimos <em>campeón</em>) con poderes únicos, y el objetivo es bastante simple: abrirte paso hasta la base enemiga y destruirla antes de que ellos destruyan la tuya.</p>
+  <div class="moments" style="margin-top:2.5rem">
+    <article class="moment reveal d1" data-tilt>
+      <span class="corner"></span><span class="corner bl"></span>
+      <div class="yr">La regla simple</div>
+      <h4>Como el ajedrez o el truco</h4>
+      <p>Las reglas se explican en un minuto. Dominarlo te lleva años. Esa distancia entre "lo entiendo" y "lo manejo bien" es justo lo que engancha.</p>
+    </article>
+    <article class="moment reveal d2" data-tilt>
+      <span class="corner"></span><span class="corner bl"></span>
+      <div class="yr">La escala</div>
+      <h4>No es un jueguito de nicho</h4>
+      <p>Salió en 2009, lo juegan decenas de millones de personas <strong>todos los días</strong> en todo el planeta, y sus campeonatos llenan estadios como un mundial.</p>
+    </article>
+    <article class="moment reveal d3" data-tilt>
+      <span class="corner"></span><span class="corner bl"></span>
+      <div class="yr">El detalle clave</div>
+      <h4>Cuesta cero pesos</h4>
+      <p>Es totalmente gratis. Lo único que se paga, si querés, son <strong>trajes para los personajes</strong>: pura estética, no cambian nada de cómo se juega.</p>
+    </article>
+  </div>
+</section>
+
+<!-- ================= REASONS ================= -->
+<section>
+  <div class="eyebrow reveal">Cuatro razones para que te importe</div>
+  <h2 class="reveal d1">Por qué a tanta gente<br><span class="accent">se le va la vida en esto</span></h2>
+
+  <div class="reason">
+    <div class="num reveal">01</div>
+    <div class="body">
+      <h3 class="reveal d1"><span class="tag">Profundidad infinita</span>Es ajedrez, pero a 200 km/h</h3>
+      <p class="reveal d2">Hay <strong>más de 160 personajes distintos</strong> para elegir, cada uno con sus poderes y su forma de jugar. Multiplicá eso por los 5 jugadores de cada equipo, por las decisiones que se toman a cada segundo, por los monstruos del mapa que dan ventajas, y vas a entender por qué nunca te toca dos veces la misma partida.</p>
+      <p class="reveal d3">Por eso no existe el "ya me lo sé". Podés jugar miles de horas y seguir aprendiendo cosas nuevas. Es de esos juegos, como el ajedrez o un instrumento, donde la cabeza importa tanto como los reflejos. No es apretar botones: es pensar rápido y bajo presión.</p>
+      <p class="pull reveal d4">"Fácil de aprender, difícil de dominar." Por eso hay gente que lleva diez años y todavía mejora.</p>
+    </div>
+  </div>
+
+  <div class="reason">
+    <div class="num reveal">02</div>
+    <div class="body">
+      <h3 class="reveal d1"><span class="tag">El verdadero motivo</span>Las amistades que se quedan</h3>
+      <p class="reveal d2">Y acá está lo que casi nadie de afuera entiende. Preguntale a cualquiera que lleve años jugando por qué sigue, y casi nadie te dice "por ganar". Te dice <strong>por la gente</strong>. El LoL es, antes que nada, una excusa para juntarse: el amigo de toda la vida, el grupo en llamada a las 2 de la mañana, las cinco personas que se gritan, se cargan y festejan como si fueran goles en un mundial.</p>
+      <p class="reveal d3">Hay amistades de diez años o más que nacieron en una partida con desconocidos. Gente que se conoció jugando y terminó yendo al casamiento del otro. Suena exagerado, pero pasa todo el tiempo. Para mucha gente este juego es la forma de mantener vivos esos vínculos cuando la vida los va separando.</p>
+      <p class="pull reveal d4">Ganar está bueno. Pero perder a las 3 de la mañana muertos de risa con tus amigos también es ganar.</p>
+    </div>
+  </div>
+
+  <div class="reason">
+    <div class="num reveal">03</div>
+    <div class="body">
+      <h3 class="reveal d1"><span class="tag">Adrenalina pura</span>Momentos que te hacen pegar un grito</h3>
+      <p class="reveal d2">¿Viste cuando un equipo da vuelta el partido en el último minuto y la cancha explota? El LoL te da esa sensación, pero <strong>siendo vos el protagonista</strong>: ganarle vos solo a tres rivales, eliminar a los cinco enemigos uno atrás del otro (eso tiene nombre, se llama <em>pentakill</em>, y es rarísimo), defender la base con un hilo de vida cuando ya dabas todo por perdido.</p>
+      <p class="reveal d3">El LoL te deja historias que después contás durante años. Son esos momentos que te ponen el corazón a mil, y la razón por la que "una partida más" termina siendo cinco.</p>
+    </div>
+  </div>
+
+  <div class="reason">
+    <div class="num reveal">04</div>
+    <div class="body">
+      <h3 class="reveal d1"><span class="tag">Un universo entero</span>Quizás ya lo conocés sin saberlo</h3>
+      <p class="reveal d2">¿Escucharon hablar de <em>Arcane</em>, la serie animada de Netflix que fue un fenómeno mundial y ganó un Emmy? Bueno, eso <strong>es League of Legends</strong>. Detrás del juego hay un mundo enorme, Runeterra, con historias, regiones y personajes tan buenos que enamoraron a un montón de gente que nunca tocó el juego.</p>
+      <p class="reveal d3">Hay cuentos, cómics, música que cantan estadios enteros. Podés entrar por donde quieras: viendo la serie, escuchando las canciones, mirando los torneos. Es un mundo gigante que se sigue expandiendo, y el juego es apenas una de sus puertas de entrada.</p>
+      <p class="pull reveal d4">Si te gustó Arcane, ya entendiste la mitad de por qué esto importa. El resto es lo que pasa cuando además lo jugás.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ================= EPIC ESPORTS MOMENTS ================= -->
+<section>
+  <div class="eyebrow reveal">Esto te va a sorprender</div>
+  <h2 class="reveal d1">Hay jugadores profesionales,<br><span class="accent">sueldos y estadios llenos</span></h2>
+  <p class="lead reveal d2">Igual que el fútbol o el básquet, el LoL tiene <strong>jugadores profesionales</strong> con contratos millonarios, ligas en cada continente y un Mundial anual que llena estadios y junta a decenas de millones de personas frente a la pantalla. Estos son momentos reales que muestran que esto es bastante más que "un jueguito":</p>
+
+  <div class="moments duo">
+    <a class="moment reveal d1" data-tilt href="https://www.youtube.com/watch?v=ZPCfoCVCx3U" target="_blank" rel="noopener">
+      <span class="corner"></span><span class="corner bl"></span>
+      <div class="yr">2013 · El que arrancó todo</div>
+      <h4>El Zed contra Zed de Faker</h4>
+      <p>Un coreano de 17 años, Lee "Faker" Sang-hyeok, gana un duelo de espejo imposible contra Ryu y lo elimina con la vida al mínimo. Ese clip se vio millones de veces y fue el comienzo del jugador que hoy muchos consideran el mejor de la historia.</p>
+      <span class="watch">Ver el momento</span>
+    </a>
+
+    <a class="moment reveal d2" data-tilt href="https://www.youtube.com/watch?v=mjJNS6uW9Zk" target="_blank" rel="noopener">
+      <span class="corner"></span><span class="corner bl"></span>
+      <div class="yr">2022 · El cuento de hadas</div>
+      <h4>DRX, el último clasificado que ganó todo</h4>
+      <p>Entraron al Mundial por la puerta de atrás, como el equipo más débil. Partida tras partida sobrevivieron a lo imposible y, en la final, el veterano "Deft", que llevaba casi diez años sin ganar nada grande, levantó la copa entre lágrimas. Deporte en estado puro.</p>
+      <span class="watch">Ver el momento</span>
+    </a>
+
+    <a class="moment reveal d3" data-tilt href="https://www.youtube.com/watch?v=Ra8_XtaHDxc" target="_blank" rel="noopener">
+      <span class="corner"></span><span class="corner bl"></span>
+      <div class="yr">2022 · El robo del siglo</div>
+      <h4>El Barón robado de Gumayusi</h4>
+      <p>En esa misma final, con todo en juego, Gumayusi (el tirador de T1) clavó una flecha de Varus a último segundo y le robó el Barón a DRX delante de todos. Un robo así, en la final del Mundial y con la presión al máximo, es de las cosas más difíciles y espectaculares que existen en el juego.</p>
+      <span class="watch">Ver el momento</span>
+    </a>
+
+    <a class="moment reveal d4" data-tilt href="https://www.youtube.com/watch?v=M8NTurKA9pw" target="_blank" rel="noopener">
+      <span class="corner"></span><span class="corner bl"></span>
+      <div class="yr">2023 · La redención</div>
+      <h4>Faker campeón en casa, en Seúl</h4>
+      <p>Diez años después de aquel Zed, Faker vuelve a ganar el Mundial en su propio país, con el estadio coreano entero gritando su nombre. Su cuarto título. Pocas veces el deporte escribe finales tan redondos.</p>
+      <span class="watch">Ver el momento</span>
+    </a>
+
+    <a class="moment reveal d5" data-tilt href="https://www.youtube.com/watch?v=pzt6SmvGpXk" target="_blank" rel="noopener">
+      <span class="corner"></span><span class="corner bl"></span>
+      <div class="yr">2025 · El himno más reciente</div>
+      <h4>"Sacrifice", el himno del último Mundial</h4>
+      <p>Cada Mundial estrena su propio himno y un show de apertura con bandas en vivo, hologramas y decenas de miles de personas cantando. El más nuevo es "Sacrifice" de G.E.M., el tema del Mundial 2025, el de los 15 años del juego. Antes ya habían quedado para la historia "Legends Never Die" o "POP/STARS" de K/DA.</p>
+      <span class="watch">Ver el momento</span>
+    </a>
+
+    <a class="moment reveal d5" data-tilt href="https://www.youtube.com/watch?v=NMEBLMcu1FA" target="_blank" rel="noopener">
+      <span class="corner"></span><span class="corner bl"></span>
+      <div class="yr">2017 · En español, el casteo legendario</div>
+      <h4>El "¡SON ROBOTS!" de Ibai</h4>
+      <p>En el Mundial 2017, narrando un SKT vs EDG, Ibai Llanos (hoy el streamer más grande de habla hispana) se descontroló gritando "¡SON ROBOTS! ¡SON ROBOTS!" al ver a los coreanos jugar con una precisión que no parecía humana. Ese grito se volvió un meme eterno y, para muchos por acá, fue la puerta de entrada al juego.</p>
+      <span class="watch">Ver el momento</span>
+    </a>
+  </div>
+</section>
+
+<!-- ================= STATS BAND ================= -->
+<section class="stats-band">
+  <div class="eyebrow reveal" style="justify-content:center">No lo digo yo, lo dicen los números</div>
+  <div class="stats">
+    <div class="stat reveal d1"><div class="n" data-count="160" data-suffix="+">0</div><div class="lbl">campeones distintos para elegir</div></div>
+    <div class="stat reveal d2"><div class="n" data-count="100" data-suffix="M+">0</div><div class="lbl">jugadores activos cada mes</div></div>
+    <div class="stat reveal d3"><div class="n" data-count="2009" data-plain="1">0</div><div class="lbl">año en que nació la leyenda</div></div>
+    <div class="stat reveal d4"><div class="n" data-count="6" data-suffix="M+">0</div><div class="lbl">personas viendo la final del Mundial a la vez</div></div>
+  </div>
+</section>
+
+<!-- ================= MYTH vs REALITY ================= -->
+<section>
+  <div class="eyebrow reveal">Volvamos a la fama de tóxico</div>
+  <h2 class="reveal d1">Eso que te frena,<br><span class="accent">desarmado punto por punto</span></h2>
+  <p class="lead reveal d2">Estas son, casi palabra por palabra, las razones por las que te dicen "ni te metas". Y acá está por qué <strong>ninguna se sostiene del todo</strong>: casi todo tiene solución, y la mayoría está a un par de clicks.</p>
+
+  <div class="myths reveal d2">
+    <div class="myth-row">
+      <div class="side m"><div class="h">El mito</div><p>"Te van a insultar toda la partida y no podés hacer nada."</p></div>
+      <div class="side r"><div class="h">La realidad</div><p>Silenciás al jugador con un botón (hay un /mute all que calla a todos) y dejás de leerlo en dos segundos. El que molesta deja de existir para vos.</p></div>
+    </div>
+    <div class="myth-row">
+      <div class="side m"><div class="h">El mito</div><p>"Siempre te toca gente que abandona y arruina todo."</p></div>
+      <div class="side r"><div class="h">La realidad</div><p>Si jugás en grupo (dúo, trío, flex de 5) prácticamente eliminás a los randoms. Con amigos, la experiencia es otro juego.</p></div>
+    </div>
+    <div class="myth-row">
+      <div class="side m"><div class="h">El mito</div><p>"A nadie le importa portarse bien."</p></div>
+      <div class="side r"><div class="h">La realidad</div><p>Existe el sistema de Honor: tus compañeros te premian por la buena onda y eso te da recompensas. Y Riot castiga en serio a los tóxicos que reinciden.</p></div>
+    </div>
+    <div class="myth-row">
+      <div class="side m"><div class="h">El mito</div><p>"Te vas a amargar y vas a terminar peleado."</p></div>
+      <div class="side r"><div class="h">La realidad</div><p>El truco mental que cambia todo: jugá para mejorar vos, no para ganar. La derrota deja de doler cuando la usás para aprender.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= STARTER CHAMPS ================= -->
+<section>
+  <div class="eyebrow reveal">¿Y si me diera curiosidad?</div>
+  <h2 class="reveal d1">No hace falta ser un genio<br><span class="accent">para empezar a divertirte</span></h2>
+  <p class="lead reveal d2">No hace falta que entiendan nada de lo que sigue, es solo para mostrarles lo accesible que es. Estos personajes son fáciles, perdonan los errores y te enseñan el juego mientras te reís. Nadie arranca de cero contra expertos.</p>
+
+  <div class="champs">
+    <div class="champ reveal d1"><div class="role">Top · Luchador</div><div class="name">Garen</div>
+      <div class="kit">
+        <div class="abil" title="Pasiva · Perseverancia"><img src="https://ddragon.leagueoflegends.com/cdn/16.12.1/img/passive/Garen_Passive.png" alt="Perseverancia" loading="lazy"><span class="k">P</span><span class="an">Perseverancia</span></div>
+        <div class="abil" title="Q · Golpe Decisivo"><img src="https://ddragon.leagueoflegends.com/cdn/16.12.1/img/spell/GarenQ.png" alt="Golpe Decisivo" loading="lazy"><span class="k">Q</span><span class="an">Golpe Decisivo</span></div>
+        <div class="abil" title="W · Coraje"><img src="https://ddragon.leagueoflegends.com/cdn/16.12.1/img/spell/GarenW.png" alt="Coraje" loading="lazy"><span class="k">W</span><span class="an">Coraje</span></div>
+        <div class="abil" title="E · Juicio"><img src="https://ddragon.leagueoflegends.com/cdn/16.12.1/img/spell/GarenE.png" alt="Juicio" loading="lazy"><span class="k">E</span><span class="an">Juicio</span></div>
+        <div class="abil" title="R · Justicia Demaciana"><img src="https://ddragon.leagueoflegends.com/cdn/16.12.1/img/spell/GarenR.png" alt="Justicia Demaciana" loading="lazy"><span class="k">R</span><span class="an">Justicia Demaciana</span></div>
+      </div></div>
+    <div class="champ reveal d2"><div class="role">Top · Luchador</div><div class="name">Darius</div>
+      <div class="kit">
+        <div class="abil" title="Pasiva · Hemorragia"><img src="https://ddragon.leagueoflegends.com/cdn/16.12.1/img/passive/Darius_Icon_Hemorrhage.png" alt="Hemorragia" loading="lazy"><span class="k">P</span><span class="an">Hemorragia</span></div>
+        <div class="abil" title="Q · Diezmar"><img src="https://ddragon.leagueoflegends.com/cdn/16.12.1/img/spell/DariusCleave.png" alt="Diezmar" loading="lazy"><span class="k">Q</span><span class="an">Diezmar</span></div>
+        <div class="abil" title="W · Golpe Incapacitante"><img src="https://ddragon.leagueoflegends.com/cdn/16.12.1/img/spell/DariusNoxianTacticsONH.png" alt="Golpe Incapacitante" loading="lazy"><span class="k">W</span><span class="an">Golpe Incapacitante</span></div>
+        <div class="abil" title="E · Aprehender"><img src="https://ddragon.leagueoflegends.com/cdn/16.12.1/img/spell/DariusAxeGrabCone.png" alt="Aprehender" loading="lazy"><span class="k">E</span><span class="an">Aprehender</span></div>
+        <div class="abil" title="R · Guillotina Noxiana"><img src="https://ddragon.leagueoflegends.com/cdn/16.12.1/img/spell/DariusExecute.png" alt="Guillotina Noxiana" loading="lazy"><span class="k">R</span><span class="an">Guillotina Noxiana</span></div>
+      </div></div>
+    <div class="champ reveal d3"><div class="role">Mid · Mago</div><div class="name">Annie</div>
+      <div class="kit">
+        <div class="abil" title="Pasiva · Piromanía"><img src="https://ddragon.leagueoflegends.com/cdn/16.12.1/img/passive/Annie_Passive.png" alt="Piromanía" loading="lazy"><span class="k">P</span><span class="an">Piromanía</span></div>
+        <div class="abil" title="Q · Desintegrar"><img src="https://ddragon.leagueoflegends.com/cdn/16.12.1/img/spell/AnnieQ.png" alt="Desintegrar" loading="lazy"><span class="k">Q</span><span class="an">Desintegrar</span></div>
+        <div class="abil" title="W · Incinerar"><img src="https://ddragon.leagueoflegends.com/cdn/16.12.1/img/spell/AnnieW.png" alt="Incinerar" loading="lazy"><span class="k">W</span><span class="an">Incinerar</span></div>
+        <div class="abil" title="E · Escudo Fundido"><img src="https://ddragon.leagueoflegends.com/cdn/16.12.1/img/spell/AnnieE.png" alt="Escudo Fundido" loading="lazy"><span class="k">E</span><span class="an">Escudo Fundido</span></div>
+        <div class="abil" title="R · Invocar: Tibbers"><img src="https://ddragon.leagueoflegends.com/cdn/16.12.1/img/spell/AnnieR.png" alt="Invocar: Tibbers" loading="lazy"><span class="k">R</span><span class="an">Invocar: Tibbers</span></div>
+      </div></div>
+    <div class="champ reveal d4"><div class="role">Jungla · Luchador</div><div class="name">Warwick</div>
+      <div class="kit">
+        <div class="abil" title="Pasiva · Sed Insaciable"><img src="https://ddragon.leagueoflegends.com/cdn/16.12.1/img/passive/WarwickP.png" alt="Sed Insaciable" loading="lazy"><span class="k">P</span><span class="an">Sed Insaciable</span></div>
+        <div class="abil" title="Q · Fauces de la Bestia"><img src="https://ddragon.leagueoflegends.com/cdn/16.12.1/img/spell/WarwickQ.png" alt="Fauces de la Bestia" loading="lazy"><span class="k">Q</span><span class="an">Fauces de la Bestia</span></div>
+        <div class="abil" title="W · Cacería de Sangre"><img src="https://ddragon.leagueoflegends.com/cdn/16.12.1/img/spell/WarwickW.png" alt="Cacería de Sangre" loading="lazy"><span class="k">W</span><span class="an">Cacería de Sangre</span></div>
+        <div class="abil" title="E · Aullido Primigenio"><img src="https://ddragon.leagueoflegends.com/cdn/16.12.1/img/spell/WarwickE.png" alt="Aullido Primigenio" loading="lazy"><span class="k">E</span><span class="an">Aullido Primigenio</span></div>
+        <div class="abil" title="R · Opresión Infinita"><img src="https://ddragon.leagueoflegends.com/cdn/16.12.1/img/spell/WarwickR.png" alt="Opresión Infinita" loading="lazy"><span class="k">R</span><span class="an">Opresión Infinita</span></div>
+      </div></div>
+    <div class="champ reveal d5"><div class="role">ADC · Tirador</div><div class="name">Miss Fortune</div>
+      <div class="kit">
+        <div class="abil" title="Pasiva · Toque de Amor"><img src="https://ddragon.leagueoflegends.com/cdn/16.12.1/img/passive/MissFortune_W.png" alt="Toque de Amor" loading="lazy"><span class="k">P</span><span class="an">Toque de Amor</span></div>
+        <div class="abil" title="Q · Doble Bala"><img src="https://ddragon.leagueoflegends.com/cdn/16.12.1/img/spell/MissFortuneRicochetShot.png" alt="Doble Bala" loading="lazy"><span class="k">Q</span><span class="an">Doble Bala</span></div>
+        <div class="abil" title="W · Alarde"><img src="https://ddragon.leagueoflegends.com/cdn/16.12.1/img/spell/MissFortuneViciousStrikes.png" alt="Alarde" loading="lazy"><span class="k">W</span><span class="an">Alarde</span></div>
+        <div class="abil" title="E · Lluvia de Plomo"><img src="https://ddragon.leagueoflegends.com/cdn/16.12.1/img/spell/MissFortuneScattershot.png" alt="Lluvia de Plomo" loading="lazy"><span class="k">E</span><span class="an">Lluvia de Plomo</span></div>
+        <div class="abil" title="R · Balacera"><img src="https://ddragon.leagueoflegends.com/cdn/16.12.1/img/spell/MissFortuneBulletTime.png" alt="Balacera" loading="lazy"><span class="k">R</span><span class="an">Balacera</span></div>
+      </div></div>
+    <div class="champ reveal d5"><div class="role">Support · Encantadora</div><div class="name">Soraka</div>
+      <div class="kit">
+        <div class="abil" title="Pasiva · Salvación"><img src="https://ddragon.leagueoflegends.com/cdn/16.12.1/img/passive/Soraka_Passive.png" alt="Salvación" loading="lazy"><span class="k">P</span><span class="an">Salvación</span></div>
+        <div class="abil" title="Q · Invocación Estelar"><img src="https://ddragon.leagueoflegends.com/cdn/16.12.1/img/spell/SorakaQ.png" alt="Invocación Estelar" loading="lazy"><span class="k">Q</span><span class="an">Invocación Estelar</span></div>
+        <div class="abil" title="W · Infusión Astral"><img src="https://ddragon.leagueoflegends.com/cdn/16.12.1/img/spell/SorakaW.png" alt="Infusión Astral" loading="lazy"><span class="k">W</span><span class="an">Infusión Astral</span></div>
+        <div class="abil" title="E · Equinoccio"><img src="https://ddragon.leagueoflegends.com/cdn/16.12.1/img/spell/SorakaE.png" alt="Equinoccio" loading="lazy"><span class="k">E</span><span class="an">Equinoccio</span></div>
+        <div class="abil" title="R · Plegaria"><img src="https://ddragon.leagueoflegends.com/cdn/16.12.1/img/spell/SorakaR.png" alt="Plegaria" loading="lazy"><span class="k">R</span><span class="an">Plegaria</span></div>
+      </div></div>
+  </div>
+</section>
+
+<!-- ================= CLOSER ================= -->
+<section class="closer">
+  <div class="eyebrow reveal" style="justify-content:center">Lo único que te pido</div>
+  <h2 class="reveal d1">No te pido que juegues.<br><span class="accent">Solo que lo entiendas.</span></h2>
+  <p class="lead reveal d2" style="text-align:center;margin:1.5rem auto 0">No los quiero convertir en jugadores. Solo quería que, la próxima vez que me escuchen hablar de esto con tanta pasión, <strong>entiendan que no es "solo un jueguito tóxico"</strong>: es estrategia, son amigos, son historias, es un mundo entero. Y si después de todo esto a alguno le quedaron ganas de probar una partida, ya saben dónde encontrarme.</p>
+  <a href="https://www.leagueoflegends.com" target="_blank" rel="noopener" class="cta" data-hot>Curiosear el juego</a>
+  <p class="signature reveal d3">Gracias por bancarse la charla.</p>
+</section>
+
+<div class="footer">League of Legends y Runeterra son propiedad de Riot Games. Esta es una presentación hecha por un fan, sin fines comerciales.</div>
+
+<script>
+/* ---------- particle starfield ---------- */
+const cv=document.getElementById('stars'),ctx=cv.getContext('2d');
+let W,H,parts=[];
+function resize(){W=cv.width=innerWidth;H=cv.height=innerHeight;
+  const n=Math.min(120,Math.floor(W*H/14000));parts=[];
+  for(let i=0;i<n;i++)parts.push({x:Math.random()*W,y:Math.random()*H,r:Math.random()*1.6+.3,
+    sp:Math.random()*.4+.1,o:Math.random()*.6+.2,tw:Math.random()*Math.PI*2,
+    c:Math.random()>.7?'10,200,185':'200,170,110'});}
+resize();addEventListener('resize',resize);
+function draw(){ctx.clearRect(0,0,W,H);
+  for(const p of parts){p.y-=p.sp;p.tw+=.02;if(p.y<-5){p.y=H+5;p.x=Math.random()*W}
+    const fl=p.o*(0.6+0.4*Math.sin(p.tw));
+    ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,7);ctx.fillStyle=`rgba(${p.c},${fl})`;
+    ctx.shadowBlur=8;ctx.shadowColor=`rgba(${p.c},${fl})`;ctx.fill();}
+  requestAnimationFrame(draw);}
+draw();
+
+/* ---------- scroll progress ---------- */
+const prog=document.getElementById('progress');
+addEventListener('scroll',()=>{const h=document.documentElement;
+  prog.style.width=(h.scrollTop/(h.scrollHeight-h.clientHeight)*100)+'%';},{passive:true});
+
+/* ---------- reveal on scroll ---------- */
+const io=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}});},{threshold:.18});
+document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+
+/* ---------- strike-through trigger ---------- */
+const so=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');so.unobserve(e.target);}});},{threshold:.6});
+document.querySelectorAll('[data-strike]').forEach(el=>so.observe(el));
+
+/* ---------- count up ---------- */
+const co=new IntersectionObserver(es=>{es.forEach(e=>{if(!e.isIntersecting)return;const el=e.target;
+  if(el.dataset.text){el.textContent=el.dataset.text;co.unobserve(el);return;}
+  const end=+el.dataset.count,suf=el.dataset.suffix||'';let t0=null;
+  function step(ts){if(!t0)t0=ts;const p=Math.min((ts-t0)/1600,1);
+    const e2=1-Math.pow(1-p,3),v=Math.floor(e2*end);
+    el.textContent=(el.dataset.plain?String(v):v.toLocaleString('es'))+(p===1?suf:'');
+    if(p<1)requestAnimationFrame(step);}
+  requestAnimationFrame(step);co.unobserve(el);});},{threshold:.6});
+document.querySelectorAll('[data-count]').forEach(el=>co.observe(el));
+
+/* ---------- 3D tilt + glow follow on moment cards ---------- */
+document.querySelectorAll('[data-tilt]').forEach(card=>{
+  card.addEventListener('mousemove',e=>{const r=card.getBoundingClientRect();
+    const px=(e.clientX-r.left)/r.width,py=(e.clientY-r.top)/r.height;
+    card.style.transform=`perspective(800px) rotateY(${(px-.5)*8}deg) rotateX(${(.5-py)*8}deg) translateY(-6px)`;
+    card.style.setProperty('--mx',px*100+'%');card.style.setProperty('--my',py*100+'%');});
+  card.addEventListener('mouseleave',()=>{card.style.transform='';});
+});
+
+/* ---------- parallax runes ---------- */
+addEventListener('scroll',()=>{const y=scrollY;
+  document.querySelectorAll('.rune').forEach((r,i)=>{r.style.transform=`translateY(${y*(.06+i*.03)}px)`;});
+},{passive:true});
+</script>
+</body>
+</html>
